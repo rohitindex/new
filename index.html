@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class X Smart Notes</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    padding:18px 5%;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+button{
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.nav button{
+    margin-left:8px;
+    background:white;
+    color:#2563eb;
+}
+
+.hero{
+    text-align:center;
+    padding:65px 20px;
+    background:white;
+}
+
+.hero h1{
+    font-size:45px;
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+.hero p{
+    color:#64748b;
+    margin-bottom:25px;
+}
+
+.search{
+    width:92%;
+    max-width:700px;
+    padding:16px 20px;
+    border:2px solid #2563eb;
+    border-radius:40px;
+    font-size:40px;
+    outline:none;
+}
+
+.container{
+    width:92%;
+    max-width:1200px;
+    margin:auto;
+    padding:45px 0;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:30px;
+    font-size:30px;
+}
+
+.subjects{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.subject{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 5px 20px #00000012;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.subject:hover{
+    transform:translateY(-5px);
+}
+
+.subject .icon{
+    font-size:35px;
+}
+
+.subject h3{
+    color:#2563eb;
+    margin:12px 0;
+}
+
+.subject p{
+    color:#64748b;
+}
+
+.notes{
+    background:#eef4ff;
+}
+
+.chapter{
+    background:white;
+    margin:15px 0;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 3px 12px #00000010;
+}
+
+.chapter-head{
+    padding:20px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    color:#2563eb;
+    font-size:17px;
+}
+
+.chapter-body{
+    display:none;
+    padding:0 25px 25px;
+}
+
+.chapter.open .chapter-body{
+    display:block;
+}
+
+.topic{
+    padding:18px 0;
+    border-bottom:1px solid #e5e7eb;
+    line-height:1.7;
+}
+
+.topic h4{
+    color:#7c3aed;
+    margin-bottom:8px;
+}
+
+.topic ul{
+    margin-left:25px;
+}
+
+.formula{
+    background:#eff6ff;
+    border-left:5px solid #2563eb;
+    padding:15px;
+    margin:15px 0;
+    font-size:17px;
+}
+
+.complete{
+    margin-top:18px;
+    background:#16a34a;
+    color:white;
+}
+
+.completed{
+    background:#64748b;
+}
+
+footer{
+    background:#111827;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+body.dark{
+    background:#0f172a;
+    color:white;
+}
+
+body.dark .hero,
+body.dark .subject,
+body.dark .chapter{
+    background:#1e293b;
+}
+
+body.dark .notes{
+    background:#111827;
+}
+
+body.dark .hero p,
+body.dark .subject p{
+    color:#cbd5e1;
+}
+
+body.dark .formula{
+    background:#172554;
+}
+
+@media(max-width:650px){
+    .nav{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="nav">
+
+<div class="logo">
+📚 beta rohit papa se padhne aa gaya
+</div>
+
+<div>
+<button onclick="goHome()">🏠 Home</button>
+<button onclick="darkMode()">🌙 Dark Mode</button>
+</div>
+
+</div>
+</header>
+
+
+<section class="hero" id="home">
+
+<h1>beta rohit papa se aagaya padhne </h1>
+
+<p>
+Complete Class 10 Notes • Chapters • Important Points • Formulas
+</p>
+
+<input
+class="search"
+id="search"
+type="text"
+placeholder="🔍 Search chapter or topic..."
+oninput="searchNotes()">
+
+</section>
+
+
+<section class="container">
+
+<h2 class="title">
+📚 All Subjects
+</h2>
+
+<div class="subjects">
+
+<div class="subject" onclick="filterSubject('Science')">
+<div class="icon">🔬</div>
+<h3>Science</h3>
+<p>Physics + Chemistry + Biology</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Mathematics')">
+<div class="icon">📐</div>
+<h3>Mathematics</h3>
+<p>Formulas + Concepts + Examples</p>
+</div>
+
+<div class="subject" onclick="filterSubject('History')">
+<div class="icon">📜</div>
+<h3>History</h3>
+<p>Important events and concepts</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Geography')">
+<div class="icon">🌍</div>
+<h3>Geography</h3>
+<p>Resources + Agriculture + Maps</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Civics')">
+<div class="icon">🏛️</div>
+<h3>Civics</h3>
+<p>Democracy and Politics</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Economics')">
+<div class="icon">💰</div>
+<h3>Economics</h3>
+<p>Money + Development + Sectors</p>
+</div>
+
+<div class="subject" onclick="filterSubject('English')">
+<div class="icon">📖</div>
+<h3>English</h3>
+<p>Literature + Grammar + Writing</p>
+</div>
+
+<div class="subject" onclick="filterSubject('Hindi')">
+<div class="icon">🇮🇳</div>
+<h3>Hindi</h3>
+<p>साहित्य + व्याकरण + लेखन</p>
+</div>
+
+</div>
+</section>
+
+
+<section class="notes">
+
+<div class="container">
+
+<h2 class="title">
+📝 Chapter Wise Notes
+</h2>
+
+<div id="chapters">
+
+
+<!-- SCIENCE -->
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 1 — Chemical Reactions and Equations</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>रासायनिक अभिक्रिया</h4>
+
+<p>
+जब एक या एक से अधिक पदार्थ आपस में अभिक्रिया करके
+नए पदार्थ बनाते हैं, तो इसे Chemical Reaction कहते हैं।
+</p>
+
+</div>
+
+<div class="topic">
+
+<h4>Important Topics</h4>
+
+<ul>
+<li>Combination Reaction</li>
+<li>Decomposition Reaction</li>
+<li>Displacement Reaction</li>
+<li>Double Displacement Reaction</li>
+<li>Oxidation</li>
+<li>Reduction</li>
+<li>Corrosion</li>
+<li>Rancidity</li>
+</ul>
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 2 — Acids, Bases and Salts</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>Acid</h4>
+
+<p>
+Acid ऐसे पदार्थ होते हैं जो aqueous solution में
+H⁺ ions प्रदान करते हैं।
+</p>
+
+</div>
+
+<div class="topic">
+
+<h4>Base</h4>
+
+<p>
+Base aqueous solution में OH⁻ ions प्रदान करते हैं।
+</p>
+
+</div>
+
+<div class="topic">
+
+<h4>Important Topics</h4>
+
+<ul>
+<li>Indicators</li>
+<li>pH Scale</li>
+<li>Neutralisation</li>
+<li>Baking Soda</li>
+<li>Washing Soda</li>
+<li>Plaster of Paris</li>
+<li>Common Salt</li>
+</ul>
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 3 — Metals and Non-metals</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>Important Topics</h4>
+
+<ul>
+<li>Physical Properties</li>
+<li>Chemical Properties</li>
+<li>Reactivity Series</li>
+<li>Ionic Compounds</li>
+<li>Extraction of Metals</li>
+<li>Corrosion</li>
+<li>Prevention of Corrosion</li>
+</ul>
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 4 — Carbon and Its Compounds</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>Carbon</h4>
+
+<p>
+Carbon की tetravalency और catenation के कारण
+बहुत सारे carbon compounds बनते हैं।
+</p>
+
+</div>
+
+<ul>
+<li>Covalent Bond</li>
+<li>Hydrocarbons</li>
+<li>Homologous Series</li>
+<li>Functional Groups</li>
+<li>Ethanol</li>
+<li>Ethanoic Acid</li>
+<li>Soap and Detergents</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 5 — Life Processes</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="topic">
+
+<h4>Life Processes</h4>
+
+<ul>
+<li>Nutrition</li>
+<li>Respiration</li>
+<li>Transportation</li>
+<li>Excretion</li>
+<li>Photosynthesis</li>
+<li>Human Digestive System</li>
+<li>Human Respiratory System</li>
+<li>Circulatory System</li>
+</ul>
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 6 — Control and Coordination</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Neuron</li>
+<li>Brain</li>
+<li>Spinal Cord</li>
+<li>Reflex Action</li>
+<li>Plant Hormones</li>
+<li>Animal Hormones</li>
+<li>Human Nervous System</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 7 — How do Organisms Reproduce?</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Asexual Reproduction</li>
+<li>Sexual Reproduction</li>
+<li>Binary Fission</li>
+<li>Budding</li>
+<li>Vegetative Propagation</li>
+<li>Human Reproductive System</li>
+<li>Reproductive Health</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 8 — Heredity</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Genes</li>
+<li>Chromosomes</li>
+<li>Mendel's Experiments</li>
+<li>Dominant Traits</li>
+<li>Recessive Traits</li>
+<li>Sex Determination</li>
+<li>Evolution</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 9 — Light: Reflection and Refraction</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+Mirror Formula:<br>
+1/f = 1/v + 1/u
+
+<br><br>
+
+Magnification:<br>
+m = -v/u
+
+</div>
+
+<ul>
+<li>Reflection</li>
+<li>Refraction</li>
+<li>Ray Diagrams</li>
+<li>Mirror Formula</li>
+<li>Lens Formula</li>
+<li>Magnification</li>
+<li>Power of Lens</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 10 — Human Eye and Colourful World</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Human Eye</li>
+<li>Accommodation</li>
+<li>Myopia</li>
+<li>Hypermetropia</li>
+<li>Presbyopia</li>
+<li>Dispersion</li>
+<li>Scattering of Light</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 11 — Electricity</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+I = Q/t
+
+<br><br>
+
+V = IR
+
+<br><br>
+
+P = VI
+
+<br><br>
+
+P = I²R
+
+</div>
+
+<ul>
+<li>Electric Current</li>
+<li>Potential Difference</li>
+<li>Resistance</li>
+<li>Ohm's Law</li>
+<li>Series Combination</li>
+<li>Parallel Combination</li>
+<li>Electrical Power</li>
+<li>Electrical Energy</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 12 — Magnetic Effects of Electric Current</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Magnetic Field</li>
+<li>Magnetic Field Lines</li>
+<li>Right Hand Thumb Rule</li>
+<li>Solenoid</li>
+<li>Electric Motor</li>
+<li>Electric Generator</li>
+<li>Electromagnetic Induction</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Science">
+
+<div class="chapter-head">
+<b>🔬 Science 13 — Our Environment</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Ecosystem</li>
+<li>Food Chain</li>
+<li>Trophic Levels</li>
+<li>Biodegradable Waste</li>
+<li>Non-biodegradable Waste</li>
+<li>Ozone Layer</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- MATHEMATICS -->
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 1 — Real Numbers</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+a = bq + r
+<br>
+0 ≤ r &lt; b
+</div>
+
+<ul>
+<li>Euclid's Division Algorithm</li>
+<li>HCF</li>
+<li>LCM</li>
+<li>Fundamental Theorem of Arithmetic</li>
+<li>Irrational Numbers</li>
+<li>Decimal Expansion</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 2 — Polynomials</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Zeroes of Polynomial</li>
+<li>Relationship between zeroes and coefficients</li>
+<li>Quadratic Polynomial</li>
+<li>Cubic Polynomial</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 3 — Pair of Linear Equations</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+a₁x + b₁y + c₁ = 0
+<br>
+a₂x + b₂y + c₂ = 0
+</div>
+
+<ul>
+<li>Graphical Method</li>
+<li>Substitution Method</li>
+<li>Elimination Method</li>
+<li>Cross Multiplication Method</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 4 — Quadratic Equations</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+ax² + bx + c = 0
+
+<br><br>
+
+x = (-b ± √(b² - 4ac))/2a
+
+<br><br>
+
+D = b² - 4ac
+
+</div>
+
+<ul>
+<li>Quadratic Equation</li>
+<li>Factorisation</li>
+<li>Quadratic Formula</li>
+<li>Discriminant</li>
+<li>Nature of Roots</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 5 — Arithmetic Progressions</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+aₙ = a + (n - 1)d
+
+<br><br>
+
+Sₙ = n/2 [2a + (n - 1)d]
+
+</div>
+
+<ul>
+<li>First Term</li>
+<li>Common Difference</li>
+<li>nth Term</li>
+<li>Sum of AP</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 6 — Triangles</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Similar Triangles</li>
+<li>Basic Proportionality Theorem</li>
+<li>Areas of Similar Triangles</li>
+<li>Pythagoras Theorem</li>
+</ul>
+
+<div class="formula">
+Hypotenuse² = Base² + Perpendicular²
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 7 — Coordinate Geometry</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+Distance =
+√[(x₂-x₁)² + (y₂-y₁)²]
+
+</div>
+
+<ul>
+<li>Distance Formula</li>
+<li>Section Formula</li>
+<li>Area of Triangle</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 8 — Introduction to Trigonometry</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+sin θ = P/H
+
+<br><br>
+cos θ = B/H
+
+<br><br>
+tan θ = P/B
+
+<br><br>
+sin²θ + cos²θ = 1
+
+</div>
+
+<ul>
+<li>Trigonometric Ratios</li>
+<li>Standard Angles</li>
+<li>Trigonometric Identities</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 9 — Applications of Trigonometry</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Height and Distance</li>
+<li>Angle of Elevation</li>
+<li>Angle of Depression</li>
+<li>Line of Sight</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 10 — Circles</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Tangent</li>
+<li>Radius and Tangent</li>
+<li>Two Tangents from External Point</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 11 — Areas Related to Circles</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+Area = πr²
+
+<br><br>
+
+Circumference = 2πr
+
+<br><br>
+
+Sector Area = θ/360 × πr²
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 12 — Surface Areas and Volumes</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Cube</li>
+<li>Cuboid</li>
+<li>Cylinder</li>
+<li>Cone</li>
+<li>Sphere</li>
+<li>Hemisphere</li>
+</ul>
+
+<div class="formula">
+
+Cylinder Volume = πr²h
+
+<br><br>
+
+Sphere Volume = 4/3 πr³
+
+</div>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 13 — Statistics</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Mean</li>
+<li>Median</li>
+<li>Mode</li>
+<li>Grouped Data</li>
+<li>Cumulative Frequency</li>
+<li>Ogive</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Mathematics">
+
+<div class="chapter-head">
+<b>📐 Mathematics 14 — Probability</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<div class="formula">
+
+P(E) =
+Favourable Outcomes /
+Total Outcomes
+
+</div>
+
+<ul>
+<li>0 ≤ P(E) ≤ 1</li>
+<li>Probability of impossible event = 0</li>
+<li>Probability of sure event = 1</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- HISTORY -->
+
+<div class="chapter" data-subject="History">
+
+<div class="chapter-head">
+<b>📜 History 1 — The Rise of Nationalism in Europe</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>French Revolution</li>
+<li>Liberalism</li>
+<li>Conservatism</li>
+<li>Unification of Germany</li>
+<li>Unification of Italy</li>
+<li>Balkan Region</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="History">
+
+<div class="chapter-head">
+<b>📜 History 2 — Nationalism in India</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Rowlatt Act</li>
+<li>Jallianwala Bagh</li>
+<li>Non-Cooperation Movement</li>
+<li>Civil Disobedience Movement</li>
+<li>Dandi March</li>
+<li>Collective Belonging</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="History">
+
+<div class="chapter-head">
+<b>📜 History 3 — The Making of a Global World</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Silk Routes</li>
+<li>Colonialism</li>
+<li>Indentured Labour</li>
+<li>Great Depression</li>
+<li>Globalisation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="History">
+
+<div class="chapter-head">
+<b>📜 History 4 — Print Culture and Modern World</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Printing in China</li>
+<li>Gutenberg Press</li>
+<li>Print Revolution</li>
+<li>Print and Religion</li>
+<li>Print in India</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- GEOGRAPHY -->
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 1 — Resources and Development</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Types of Resources</li>
+<li>Resource Planning</li>
+<li>Land Resources</li>
+<li>Soil Types</li>
+<li>Soil Conservation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 2 — Forest and Wildlife Resources</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Biodiversity</li>
+<li>Flora and Fauna</li>
+<li>Conservation</li>
+<li>Protected Areas</li>
+<li>Community Participation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 3 — Water Resources</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Water Scarcity</li>
+<li>Multipurpose Projects</li>
+<li>Rainwater Harvesting</li>
+<li>Water Conservation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 4 — Agriculture</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Types of Farming</li>
+<li>Major Crops</li>
+<li>Rice</li>
+<li>Wheat</li>
+<li>Cotton</li>
+<li>Tea</li>
+<li>Coffee</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 5 — Minerals and Energy Resources</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Metallic Minerals</li>
+<li>Non-metallic Minerals</li>
+<li>Coal</li>
+<li>Petroleum</li>
+<li>Natural Gas</li>
+<li>Renewable Energy</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 6 — Manufacturing Industries</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Agro-based Industries</li>
+<li>Mineral-based Industries</li>
+<li>Industrial Pollution</li>
+<li>Pollution Control</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Geography">
+
+<div class="chapter-head">
+<b>🌍 Geography 7 — Lifelines of National Economy</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Roadways</li>
+<li>Railways</li>
+<li>Waterways</li>
+<li>Airways</li>
+<li>Communication</li>
+<li>International Trade</li>
+<li>Tourism</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- CIVICS -->
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 1 — Power Sharing</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Belgium Model</li>
+<li>Sri Lanka</li>
+<li>Forms of Power Sharing</li>
+<li>Majoritarianism</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 2 — Federalism</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Union Government</li>
+<li>State Government</li>
+<li>Local Government</li>
+<li>Decentralisation</li>
+<li>Coming Together Federation</li>
+<li>Holding Together Federation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 3 — Gender, Religion and Caste</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Gender Division</li>
+<li>Religion and Politics</li>
+<li>Caste Inequalities</li>
+<li>Caste in Politics</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 4 — Political Parties</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Functions of Political Parties</li>
+<li>Challenges</li>
+<li>Reforms</li>
+<li>National Parties</li>
+<li>State Parties</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Civics">
+
+<div class="chapter-head">
+<b>🏛️ Civics 5 — Outcomes of Democracy</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Accountable Government</li>
+<li>Responsive Government</li>
+<li>Legitimate Government</li>
+<li>Economic Outcomes</li>
+<li>Dignity and Freedom</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- ECONOMICS -->
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 1 — Development</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Development Goals</li>
+<li>Per Capita Income</li>
+<li>Public Facilities</li>
+<li>Human Development</li>
+<li>Sustainable Development</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 2 — Sectors of Indian Economy</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Primary Sector</li>
+<li>Secondary Sector</li>
+<li>Tertiary Sector</li>
+<li>Organised Sector</li>
+<li>Unorganised Sector</li>
+<li>Public Sector</li>
+<li>Private Sector</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 3 — Money and Credit</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Money</li>
+<li>Banks</li>
+<li>Credit</li>
+<li>Collateral</li>
+<li>Formal Credit</li>
+<li>Informal Credit</li>
+<li>Self Help Groups</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 4 — Globalisation</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>MNCs</li>
+<li>Foreign Investment</li>
+<li>Global Production</li>
+<li>Liberalisation</li>
+<li>Impact of Globalisation</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<div class="chapter" data-subject="Economics">
+
+<div class="chapter-head">
+<b>💰 Economics 5 — Consumer Rights</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Right to Safety</li>
+<li>Right to Information</li>
+<li>Right to Choose</li>
+<li>Right to Seek Redressal</li>
+<li>Consumer Education</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- ENGLISH -->
+
+<div class="chapter" data-subject="English">
+
+<div class="chapter-head">
+<b>📖 English — Literature and Writing</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>Reading Comprehension</li>
+<li>Literature</li>
+<li>Poetry</li>
+<li>Grammar</li>
+<li>Formal Letter</li>
+<li>Analytical Paragraph</li>
+<li>Important Questions</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+<!-- HINDI -->
+
+<div class="chapter" data-subject="Hindi">
+
+<div class="chapter-head">
+<b>🇮🇳 Hindi — साहित्य और लेखन</b>
+<span>▼</span>
+</div>
+
+<div class="chapter-body">
+
+<ul>
+<li>गद्य</li>
+<li>काव्य</li>
+<li>पूरक पाठ</li>
+<li>व्याकरण</li>
+<li>लेखन</li>
+<li>अपठित बोध</li>
+<li>महत्वपूर्ण प्रश्न</li>
+</ul>
+
+<button class="complete"
+onclick="completeChapter(this)">
+Mark Complete ✓
+</button>
+
+</div>
+</div>
+
+
+</div>
+</div>
+</section>
+
+
+<footer>
+
+<h2>📚 Class X Smart Notes</h2>
+
+<p>
+Study Smart • Practice Daily • Score Better 🚀
+</p>
+
+</footer>
+
+
+<script>
+
+const chapters =
+document.querySelectorAll(".chapter");
+
+
+/* OPEN / CLOSE CHAPTER */
+
+document
+.querySelectorAll(".chapter-head")
+.forEach(function(head){
+
+head.addEventListener("click",function(){
+
+this.parentElement.classList.toggle("open");
+
+});
+
+});
+
+
+/* SEARCH */
+
+function searchNotes(){
+
+let text =
+document
+.getElementById("search")
+.value
+.toLowerCase();
+
+chapters.forEach(function(chapter){
+
+let content =
+chapter.innerText.toLowerCase();
+
+if(content.includes(text)){
+chapter.style.display="block";
+}
+else{
+chapter.style.display="none";
+}
+
+});
+
+}
+
+
+/* SUBJECT FILTER */
+
+function filterSubject(subject){
+
+chapters.forEach(function(chapter){
+
+if(chapter.dataset.subject === subject){
+
+chapter.style.display="block";
+
+}
+else{
+
+chapter.style.display="none";
+
+}
+
+});
+
+document
+.getElementById("search")
+.value="";
+
+document
+.getElementById("chapters")
+.scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+
+/* HOME */
+
+function goHome(){
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+
+/* DARK MODE */
+
+function darkMode(){
+
+document
+.body
+.classList
+.toggle("dark");
+
+localStorage.setItem(
+"darkMode",
+document.body.classList.contains("dark")
+);
+
+}
+
+
+/* LOAD DARK MODE */
+
+if(
+localStorage.getItem("darkMode")==="true"
+){
+
+document
+.body
+.classList
+.add("dark");
+
+}
+
+
+/* COMPLETED CHAPTER */
+
+function completeChapter(button){
+
+button.classList.toggle("completed");
+
+if(button.classList.contains("completed")){
+
+button.innerText="Completed ✓";
+
+}
+else{
+
+button.innerText="Mark Complete ✓";
+
+}
+
+}
+
+</script>
+
+</body>
+<br>
+
+   ............<a href ="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?projector=1/">........land</a>
+  ...........deko beta jindagi me kuchh karna hai 
+  ............<br>
+  .....................tb padhai likhai karna hoga
+...........<br>
+
+</html>
